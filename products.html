@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Products</h2>
+
+  <input id="pname" placeholder="Product Name"><br>
+  <input id="pprice" placeholder="Price"><br>
+  <input id="pbrand" placeholder="Brand"><br>
+  <input id="pcategory" placeholder="Category"><br>
+  <input id="pdesc" placeholder="Description"><br>
+
+  <button onclick="addProduct()">Add Product</button>
+
+  <br><br>
+
+  <button onclick="loadProducts()">Load Products</button>
+  <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <div id="productList"></div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

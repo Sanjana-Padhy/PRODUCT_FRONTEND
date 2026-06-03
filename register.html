@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Register</h2>
+
+  <!-- STEP 1: USER DETAILS -->
+  <div id="registerForm">
+    <input id="name" placeholder="Name"><br>
+    <input id="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+
+    <button onclick="sendOtp()">Send OTP</button>
+  </div>
+
+  <!-- STEP 2: OTP VERIFICATION -->
+  <div id="otpForm" style="display:none;">
+    <input id="otp" placeholder="Enter OTP"><br>
+    <button onclick="verifyOtp()">Verify & Register</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

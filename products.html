@@ -9,18 +9,67 @@
 <div class="container">
   <h2>Products</h2>
 
+  
   <input id="pname" placeholder="Product Name"><br>
   <input id="pprice" placeholder="Price"><br>
   <input id="pbrand" placeholder="Brand"><br>
   <input id="pcategory" placeholder="Category"><br>
   <input id="pdesc" placeholder="Description"><br>
+  <input id="pimage" placeholder="Image URL"><br>
 
   <button onclick="addProduct()">Add Product</button>
 
   <br><br>
 
+  <input id="searchText" placeholder="Search Product">
+
+<button onclick="searchProduct()">
+ Search
+</button>
+
+<br><br>
+
+<select id="sortOrder">
+    <option value="NONE">No Sorting</option>
+    <option value="ASC">Price Low → High</option>
+    <option value="DESC">Price High → Low</option>
+</select>
+
+<br> <br>
+
+<select id="categoryFilter">
+    <option value="">All Categories</option>
+    <option value="mobile">Mobile</option>
+    <option value="Electronics">Electronics</option>
+    <option value="FMCG">FMCG</option>
+    <option value="Cosmetics">Cosmetics</option>
+    <option value="Fabrics">Fabrics</option>
+</select>
+
+<button onclick="applyFilter()">
+    Filter
+</button>
+
+<br> <br>
+
   <button onclick="loadProducts()">Load Products</button>
   <button onclick="logout()">Logout</button>
+ 
+  <br><br>
+
+<br><br>
+
+<button onclick="previousPage()">
+Previous
+</button>
+
+<button onclick="nextPage()">
+Next
+</button>
+
+<p id="pageInfo">
+Page 1
+</p>
 
   <hr>
 

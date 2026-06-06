@@ -74,17 +74,20 @@ function verifyOtp() {
 }
 
 // ================= ADD PRODUCT =================
-function addProduct() {
+async function addProduct() {
 
   const token = localStorage.getItem("token");
 
- const productData = {
+ const imageUrl = await uploadImage();
+
+const productData = {
     name: document.getElementById("pname").value,
     price: document.getElementById("pprice").value,
     brand: document.getElementById("pbrand").value,
     catagory: document.getElementById("pcategory").value,
     description: document.getElementById("pdesc").value,
-    imageUrl: document.getElementById("pimage").value
+    stock: document.getElementById("pstock").value,
+    imageUrl: imageUrl
 };
 
   // UPDATE
@@ -373,6 +376,46 @@ function applyFilter(){
     filterByCategory();
 }
 
+// ================ UPLOAD IMAGE ====================
+
+async function uploadImage(){
+
+    const token =
+        localStorage.getItem("token");
+
+    const file =
+        document.getElementById("pimageFile")
+        .files[0];
+
+    if(!file){
+        return "";
+    }
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const response = await fetch(
+        `${BASE_URL}/api/v1.0/upload`,
+        {
+            method:"POST",
+            headers:{
+                "Authorization":
+                "Bearer " + token
+            },
+            body: formData
+        }
+    );
+
+   if (!response.ok) {
+    const error = await response.text();
+    console.log("Upload Error:", error);
+    throw new Error(error);
+}
+
+return await response.text();
+}
+
 // ======== Edit ========
 function editProduct(id) {
 
@@ -396,7 +439,7 @@ function editProduct(id) {
     document.getElementById("pbrand").value = p.brand;
     document.getElementById("pcategory").value = p.catagory;
     document.getElementById("pdesc").value = p.description;
-    document.getElementById("pimage").value = p.imageUrl;
+  
 
     
 
@@ -411,8 +454,7 @@ function editProduct(id) {
 document.getElementById("pname").scrollIntoView({
   behavior: "smooth"
 });
-document.getElementById("pimage").value =
-    p.imageUrl || "";
+
 
 alert("Product loaded for editing");
 
@@ -453,4 +495,15 @@ function logout() {
   localStorage.clear();
   alert("Logged out");
   window.location.href = "login.html";
+}
+
+function clearForm(){
+
+    document.getElementById("pname").value = "";
+    document.getElementById("pprice").value = "";
+    document.getElementById("pbrand").value = "";
+    document.getElementById("pcategory").value = "";
+    document.getElementById("pdesc").value = "";
+    document.getElementById("pstock").value = "";
+    document.getElementById("pimageFile").value = "";
 }

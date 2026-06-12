@@ -5,6 +5,58 @@ const pageSize = 5;
 
 let editingProductId = null;
 
+function getUserRole() {
+
+    const token =
+        localStorage.getItem("token");
+
+    if(!token){
+        return "";
+    }
+
+    try{
+
+        const payload =
+            JSON.parse(
+                atob(token.split(".")[1])
+            );
+
+        const roles =
+            payload.roles || [];
+
+        if(roles.includes("ADMIN")){
+            return "ADMIN";
+        }
+
+        return "USER";
+
+    }
+    catch(e){
+
+        return "";
+    }
+}
+
+function setupUI() {
+
+    const role = getUserRole();
+
+    if(role === "USER") {
+
+        document.querySelector(
+            "button[onclick='addProduct()']"
+        ).style.display = "none";
+
+        document.getElementById("pname").style.display = "none";
+        document.getElementById("pprice").style.display = "none";
+        document.getElementById("pbrand").style.display = "none";
+        document.getElementById("pcategory").style.display = "none";
+        document.getElementById("pdesc").style.display = "none";
+        document.getElementById("pstock").style.display = "none";
+        document.getElementById("pimageFile").style.display = "none";
+    }
+}
+
 // ================= LOGIN =================
 function login() {
   const email = document.getElementById("email").value;
@@ -74,7 +126,13 @@ function verifyOtp() {
 }
 
 // ================= ADD PRODUCT =================
+
 async function addProduct() {
+
+    if(getUserRole() !== "ADMIN"){
+        alert("Access Denied");
+        return;
+    }
 
   const token = localStorage.getItem("token");
 
@@ -118,24 +176,36 @@ const productData = {
     return;
   }
 
-  // ADD NEW PRODUCT
-  fetch(`${BASE_URL}/api/v1.0/product`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":"Bearer " + token
+// ADD NEW PRODUCT
+fetch(`${BASE_URL}/api/v1.0/product`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
     },
     body: JSON.stringify(productData)
-  })
-  .then(res => res.json())
-  .then(() => {
+})
+.then(async response => {
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        alert(data.payload);
+        return;
+    }
 
     alert("Product Added Successfully");
 
     clearForm();
 
     loadProducts();
-  });
+})
+.catch(error => {
+
+    console.error(error);
+
+    alert("Operation Failed");
+});
 }
 
 
@@ -247,13 +317,15 @@ style="object-fit:cover;border-radius:8px;"
   <p>Category : ${p.catagory}</p>
   <p>Description : ${p.description}</p>
 
-  <button onclick="editProduct(${p.pid})">
-    Edit Product
-  </button>
+${getUserRole() === "ADMIN" ? `
+<button onclick="editProduct(${p.pid})">
+  Edit Product
+</button>
 
-  <button onclick="deleteProduct(${p.pid})">
-    Delete Product
-  </button>
+<button onclick="deleteProduct(${p.pid})">
+  Delete Product
+</button>
+` : ""}
 
 </div>
 `;
@@ -350,14 +422,15 @@ style="object-fit:cover;border-radius:8px;"
                 <p>Category : ${p.catagory}</p>
                 <p>Description : ${p.description}</p>
 
-                <button onclick="editProduct(${p.pid})">
-                    Edit Product
-                </button>
+                ${getUserRole() === "ADMIN" ? `
+<button onclick="editProduct(${p.pid})">
+    Edit Product
+</button>
 
-                <button onclick="deleteProduct(${p.pid})">
-                    Delete Product
-                </button>
-
+<button onclick="deleteProduct(${p.pid})">
+    Delete Product
+</button>
+` : ""}
             </div>
             `;
         });
@@ -417,7 +490,14 @@ return await response.text();
 }
 
 // ======== Edit ========
+
+
 function editProduct(id) {
+
+    if(getUserRole() !== "ADMIN"){
+        alert("Access Denied");
+        return;
+    }
 
   const token = localStorage.getItem("token");
 
@@ -462,7 +542,14 @@ alert("Product loaded for editing");
 }
 
 // ======== DELECTE PRODUCT ==========
+
+
 function deleteProduct(id){
+
+    if(getUserRole() !== "ADMIN"){
+        alert("Access Denied");
+        return;
+    }
 
   const token = localStorage.getItem("token");
 
@@ -490,6 +577,12 @@ function deleteProduct(id){
 
 }
 
+// ================ PROFILE ============
+function goToProfile() {
+
+    window.location.href = "profile.html";
+}
+
 // ================= LOGOUT =================
 function logout() {
   localStorage.clear();
@@ -507,3 +600,10 @@ function clearForm(){
     document.getElementById("pstock").value = "";
     document.getElementById("pimageFile").value = "";
 }
+
+window.onload = function() {
+
+    setupUI();
+
+    loadProducts();
+};

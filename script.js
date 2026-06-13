@@ -41,19 +41,14 @@ function setupUI() {
 
     const role = getUserRole();
 
+    console.log("Role =", role);
+
     if(role === "USER") {
 
-        document.querySelector(
-            "button[onclick='addProduct()']"
+        document.getElementById(
+            "adminSection"
         ).style.display = "none";
 
-        document.getElementById("pname").style.display = "none";
-        document.getElementById("pprice").style.display = "none";
-        document.getElementById("pbrand").style.display = "none";
-        document.getElementById("pcategory").style.display = "none";
-        document.getElementById("pdesc").style.display = "none";
-        document.getElementById("pstock").style.display = "none";
-        document.getElementById("pimageFile").style.display = "none";
     }
 }
 
@@ -238,24 +233,60 @@ function searchProduct(){
     data.payload.forEach(p => {
 
       container.innerHTML += `
-      <div style="border:1px solid #ccc;padding:10px;margin:10px;">
+<div class="card shadow mb-4">
 
-        <img
+    <img
         src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-        width="200"
-        height="150"
-        style="object-fit:cover;border-radius:8px;">
+        class="card-img-top"
+        style="height:250px;object-fit:cover;"
+    >
 
-        <h3>${p.name}</h3>
+    <div class="card-body text-center">
 
-        <p>ID : ${p.pid}</p>
-        <p>Price : ₹ ${p.price}</p>
-        <p>Brand : ${p.brand}</p>
-        <p>Category : ${p.catagory}</p>
-        <p>Description : ${p.description}</p>
+        <h4 class="card-title fw-bold">
+            ${p.name}
+        </h4>
 
-      </div>
-      `;
+        <p><strong>ID:</strong> ${p.pid}</p>
+
+        <p>
+            <strong>Price:</strong>
+            ₹ ${p.price}
+        </p>
+
+        <p>
+            <strong>Brand:</strong>
+            ${p.brand}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            ${p.catagory}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            ${p.description}
+        </p>
+
+        ${getUserRole() === "ADMIN" ? `
+            <button
+                class="btn btn-warning me-2"
+                onclick="editProduct(${p.pid})">
+                Edit
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="deleteProduct(${p.pid})">
+                Delete
+            </button>
+        ` : ""}
+
+    </div>
+
+</div>
+`;
     });
 
   })
@@ -299,33 +330,58 @@ console.log(token);
 
       console.log("Image URL:", p.imageUrl);
 
-  container.innerHTML += `
-<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+container.innerHTML += `
+<div class="card shadow mb-4">
 
- <img
-src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-width="200"
-height="150"
-style="object-fit:cover;border-radius:8px;"
->
+    <img
+        src="${p.imageUrl || 'https://picsum.photos/300/200'}"
+        class="card-img-top"
+        style="height:250px;object-fit:cover;"
+    >
 
-  <h3>${p.name}</h3>
+    <div class="card-body text-center">
 
-  <p>ID : ${p.pid}</p>
-  <p>Price : ₹ ${p.price}</p>
-  <p>Brand : ${p.brand}</p>
-  <p>Category : ${p.catagory}</p>
-  <p>Description : ${p.description}</p>
+        <h4 class="card-title fw-bold">
+            ${p.name}
+        </h4>
 
-${getUserRole() === "ADMIN" ? `
-<button onclick="editProduct(${p.pid})">
-  Edit Product
-</button>
+        <p><strong>ID:</strong> ${p.pid}</p>
 
-<button onclick="deleteProduct(${p.pid})">
-  Delete Product
-</button>
-` : ""}
+        <p>
+            <strong>Price:</strong>
+            ₹ ${p.price}
+        </p>
+
+        <p>
+            <strong>Brand:</strong>
+            ${p.brand}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            ${p.catagory}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            ${p.description}
+        </p>
+
+        ${getUserRole() === "ADMIN" ? `
+            <button
+                class="btn btn-warning me-2"
+                onclick="editProduct(${p.pid})">
+                Edit
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="deleteProduct(${p.pid})">
+                Delete
+            </button>
+        ` : ""}
+
+    </div>
 
 </div>
 `;
@@ -403,36 +459,61 @@ function filterByCategory() {
 
         products.forEach(p => {
 
-            container.innerHTML += `
-            <div style="border:1px solid #ccc;padding:10px;margin:10px;">
-           <img
-src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-width="200"
-height="150"
-style="object-fit:cover;border-radius:8px;"
->
+           container.innerHTML += `
+<div class="card shadow mb-4">
 
-<h3>${p.name}</h3>
+    <img
+        src="${p.imageUrl || 'https://picsum.photos/300/200'}"
+        class="card-img-top"
+        style="height:250px;object-fit:cover;"
+    >
 
+    <div class="card-body text-center">
 
+        <h4 class="card-title fw-bold">
+            ${p.name}
+        </h4>
 
-                <p>ID : ${p.pid}</p>
-                <p>Price : ₹ ${p.price}</p>
-                <p>Brand : ${p.brand}</p>
-                <p>Category : ${p.catagory}</p>
-                <p>Description : ${p.description}</p>
+        <p><strong>ID:</strong> ${p.pid}</p>
 
-                ${getUserRole() === "ADMIN" ? `
-<button onclick="editProduct(${p.pid})">
-    Edit Product
-</button>
+        <p>
+            <strong>Price:</strong>
+            ₹ ${p.price}
+        </p>
 
-<button onclick="deleteProduct(${p.pid})">
-    Delete Product
-</button>
-` : ""}
-            </div>
-            `;
+        <p>
+            <strong>Brand:</strong>
+            ${p.brand}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            ${p.catagory}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            ${p.description}
+        </p>
+
+        ${getUserRole() === "ADMIN" ? `
+            <button
+                class="btn btn-warning me-2"
+                onclick="editProduct(${p.pid})">
+                Edit
+            </button>
+
+            <button
+                class="btn btn-danger"
+                onclick="deleteProduct(${p.pid})">
+                Delete
+            </button>
+        ` : ""}
+
+    </div>
+
+</div>
+`;
         });
 
     })
@@ -602,6 +683,11 @@ function clearForm(){
 }
 
 window.onload = function() {
+
+    console.log(
+        "Logged Role:",
+        getUserRole()
+    );
 
     setupUI();
 

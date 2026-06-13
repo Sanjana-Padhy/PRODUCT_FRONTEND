@@ -1,0 +1,16 @@
+body{
+    background:#f8f9fa;
+}
+
+.product-card{
+    transition:0.3s;
+}
+
+.product-card:hover{
+    transform:scale(1.02);
+}
+
+.product-image{
+    height:220px;
+    object-fit:cover;
+}

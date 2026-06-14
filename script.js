@@ -52,6 +52,19 @@ function setupUI() {
     }
 }
 
+const dashboardBtn =
+    document.getElementById("dashboardBtn");
+
+if(dashboardBtn){
+
+    const role = getUserRole();
+
+    if(role === "USER"){
+        dashboardBtn.style.display = "none";
+    }
+
+}
+
 // ================= LOGIN =================
 function login() {
   const email = document.getElementById("email").value;
@@ -656,6 +669,12 @@ function deleteProduct(id){
       alert("Delete Failed");
   });
 
+}
+
+//============== Dasboard =================
+
+function goToDashboard() {
+    window.location.href = "dashboard.html";
 }
 
 // ================ PROFILE ============

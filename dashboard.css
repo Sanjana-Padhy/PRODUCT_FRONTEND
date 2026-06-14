@@ -1,0 +1,7 @@
+.dashboard-card{
+    transition: 0.3s;
+}
+
+.dashboard-card:hover{
+    transform: scale(1.05);
+}

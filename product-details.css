@@ -1,0 +1,199 @@
+/* ==========================
+   Body
+========================== */
+
+body{
+
+    background:#f4f6f9;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+/* ==========================
+   Card
+========================== */
+
+.card{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+/* ==========================
+   Image Section
+========================== */
+
+.image-section{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:white;
+
+    height:100%;
+
+    padding:25px;
+
+}
+
+/* ==========================
+   Product Image
+========================== */
+
+#productImage{
+
+    width:100%;
+
+    max-width:420px;
+
+    height:420px;
+
+    object-fit:contain;
+
+}
+
+/* ==========================
+   Card Body
+========================== */
+
+.card-body{
+
+    padding:40px;
+
+}
+
+/* ==========================
+   Product Name
+========================== */
+
+#productName{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+}
+
+/* ==========================
+   Price
+========================== */
+
+.text-success{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+}
+
+/* ==========================
+   Description
+========================== */
+
+#productDescription{
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    color:#444;
+
+}
+
+/* ==========================
+   Details
+========================== */
+
+.card-body p{
+
+    font-size:18px;
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================
+   Button
+========================== */
+
+.btn{
+
+    border-radius:10px;
+
+}
+
+/* ==========================
+   Tablet
+========================== */
+
+@media(max-width:992px){
+
+#productImage{
+
+height:340px;
+
+}
+
+.card-body{
+
+padding:30px;
+
+}
+
+}
+
+/* ==========================
+   Mobile
+========================== */
+
+@media(max-width:768px){
+
+.image-section{
+
+padding:20px;
+
+}
+
+#productImage{
+
+height:260px;
+
+}
+
+#productName{
+
+font-size:28px;
+
+text-align:center;
+
+}
+
+.text-success{
+
+font-size:30px;
+
+text-align:center;
+
+}
+
+.card-body{
+
+padding:25px;
+
+}
+
+.card-body p{
+
+font-size:16px;
+
+}
+
+}

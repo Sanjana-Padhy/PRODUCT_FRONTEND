@@ -1,16 +1,183 @@
+/* ===========================
+   General
+=========================== */
+
 body{
-    background:#f8f9fa;
+    background:#f4f6f9;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
+/* ===========================
+   Navbar
+=========================== */
+
+.navbar{
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+/* ===========================
+   Cards
+=========================== */
+
 .product-card{
-    transition:0.3s;
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+    transition:.3s;
+    cursor:pointer;
+    height:100%;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
 }
 
 .product-card:hover{
-    transform:scale(1.02);
+    transform:translateY(-6px);
+    box-shadow:0 12px 25px rgba(0,0,0,.25);
+}
+
+/* ===========================
+   Product Image
+=========================== */
+
+.product-image{
+    width:100%;
+    height:250px;
+    object-fit:contain;
+    background:#fff;
+    padding:10px;
+}
+
+/* ===========================
+   Card Body
+=========================== */
+
+.product-card .card-body{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    padding:20px;
+}
+
+.product-card h4{
+    font-size:22px;
+    font-weight:bold;
+    min-height:60px;
+    text-align:center;
+}
+
+.product-card p{
+    margin-bottom:8px;
+    font-size:15px;
+}
+
+.price{
+    color:#198754;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.description{
+
+    display:-webkit-box;
+
+    -webkit-box-orient:vertical;
+
+    -webkit-line-clamp:2;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:normal;
+
+    line-height:1.5;
+
+    max-height:3em;
+
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+.action-buttons{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:auto;
+}
+
+.action-buttons .btn{
+    flex:1;
+}
+
+/* ===========================
+   Common Cards
+=========================== */
+
+.card{
+    border:none;
+    border-radius:18px;
+}
+
+#adminSection .card{
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
+
+/* ===========================
+   Pagination
+=========================== */
+
+#pageInfo{
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:992px){
+
+.product-image{
+height:220px;
+}
+
+}
+
+@media(max-width:768px){
+
+.product-image{
+height:200px;
+}
+
+.product-card h4{
+font-size:20px;
+min-height:auto;
+}
+
+.action-buttons{
+flex-direction:column;
+}
+
+.action-buttons .btn{
+width:100%;
+}
+
+}
+
+@media(max-width:576px){
+
+.container{
+padding-left:10px;
+padding-right:10px;
 }
 
 .product-image{
-    height:220px;
-    object-fit:cover;
+height:180px;
+}
+
+.product-card{
+margin-bottom:20px;
+}
+
 }

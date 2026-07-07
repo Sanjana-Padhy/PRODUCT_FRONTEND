@@ -5,6 +5,8 @@ const pageSize = 5;
 
 let editingProductId = null;
 
+let deletingProductId = null;
+
 function getUserRole() {
 
     const token =
@@ -245,62 +247,9 @@ function searchProduct(){
 
     data.payload.forEach(p => {
 
-      container.innerHTML += `
-<div class="card shadow mb-4">
+    container.innerHTML += createProductCard(p);
 
-    <img
-        src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-        class="card-img-top"
-        style="height:250px;object-fit:cover;"
-    >
-
-    <div class="card-body text-center">
-
-        <h4 class="card-title fw-bold">
-            ${p.name}
-        </h4>
-
-        <p><strong>ID:</strong> ${p.pid}</p>
-
-        <p>
-            <strong>Price:</strong>
-            ₹ ${p.price}
-        </p>
-
-        <p>
-            <strong>Brand:</strong>
-            ${p.brand}
-        </p>
-
-        <p>
-            <strong>Category:</strong>
-            ${p.catagory}
-        </p>
-
-        <p>
-            <strong>Description:</strong>
-            ${p.description}
-        </p>
-
-        ${getUserRole() === "ADMIN" ? `
-            <button
-                class="btn btn-warning me-2"
-                onclick="editProduct(${p.pid})">
-                Edit
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="deleteProduct(${p.pid})">
-                Delete
-            </button>
-        ` : ""}
-
-    </div>
-
-</div>
-`;
-    });
+});
 
   })
   .catch(err => {
@@ -341,64 +290,9 @@ console.log(token);
 
     data.payload.forEach(p => {
 
-      console.log("Image URL:", p.imageUrl);
+    container.innerHTML += createProductCard(p);
 
-container.innerHTML += `
-<div class="card shadow mb-4">
-
-    <img
-        src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-        class="card-img-top"
-        style="height:250px;object-fit:cover;"
-    >
-
-    <div class="card-body text-center">
-
-        <h4 class="card-title fw-bold">
-            ${p.name}
-        </h4>
-
-        <p><strong>ID:</strong> ${p.pid}</p>
-
-        <p>
-            <strong>Price:</strong>
-            ₹ ${p.price}
-        </p>
-
-        <p>
-            <strong>Brand:</strong>
-            ${p.brand}
-        </p>
-
-        <p>
-            <strong>Category:</strong>
-            ${p.catagory}
-        </p>
-
-        <p>
-            <strong>Description:</strong>
-            ${p.description}
-        </p>
-
-        ${getUserRole() === "ADMIN" ? `
-            <button
-                class="btn btn-warning me-2"
-                onclick="editProduct(${p.pid})">
-                Edit
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="deleteProduct(${p.pid})">
-                Delete
-            </button>
-        ` : ""}
-
-    </div>
-
-</div>
-`;
-    });
+});
 
   })
   .catch(err => {
@@ -472,62 +366,9 @@ function filterByCategory() {
 
         products.forEach(p => {
 
-           container.innerHTML += `
-<div class="card shadow mb-4">
+    container.innerHTML += createProductCard(p);
 
-    <img
-        src="${p.imageUrl || 'https://picsum.photos/300/200'}"
-        class="card-img-top"
-        style="height:250px;object-fit:cover;"
-    >
-
-    <div class="card-body text-center">
-
-        <h4 class="card-title fw-bold">
-            ${p.name}
-        </h4>
-
-        <p><strong>ID:</strong> ${p.pid}</p>
-
-        <p>
-            <strong>Price:</strong>
-            ₹ ${p.price}
-        </p>
-
-        <p>
-            <strong>Brand:</strong>
-            ${p.brand}
-        </p>
-
-        <p>
-            <strong>Category:</strong>
-            ${p.catagory}
-        </p>
-
-        <p>
-            <strong>Description:</strong>
-            ${p.description}
-        </p>
-
-        ${getUserRole() === "ADMIN" ? `
-            <button
-                class="btn btn-warning me-2"
-                onclick="editProduct(${p.pid})">
-                Edit
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="deleteProduct(${p.pid})">
-                Delete
-            </button>
-        ` : ""}
-
-    </div>
-
-</div>
-`;
-        });
+});
 
     })
     .catch(err => {
@@ -645,29 +486,49 @@ function deleteProduct(id){
         return;
     }
 
-  const token = localStorage.getItem("token");
+    deletingProductId = id;
 
-  if(!confirm("Delete this product?")){
-      return;
-  }
+    const modal = new bootstrap.Modal(
+        document.getElementById("deleteModal")
+    );
 
-  fetch(`${BASE_URL}/api/v1.0/product/${id}`,{
-      method:"DELETE",
-      headers:{
-          "Authorization":"Bearer " + token
-      }
-  })
-  .then(res => res.json())
-  .then(() => {
+    modal.show();
+}
 
-      alert("Product Deleted Successfully");
 
-      loadProducts();
+function confirmDelete(){
 
-  })
-  .catch(() => {
-      alert("Delete Failed");
-  });
+    const token = localStorage.getItem("token");
+
+    fetch(`${BASE_URL}/api/v1.0/product/${deletingProductId}`,{
+
+        method:"DELETE",
+
+        headers:{
+            "Authorization":"Bearer " + token
+        }
+
+    })
+    .then(res=>res.json())
+    .then(()=>{
+
+        const modal =
+            bootstrap.Modal.getInstance(
+                document.getElementById("deleteModal")
+            );
+
+        modal.hide();
+
+        deletingProductId = null;
+
+        loadProducts();
+
+    })
+    .catch(()=>{
+
+        alert("Delete Failed");
+
+    });
 
 }
 
@@ -701,6 +562,89 @@ function clearForm(){
     document.getElementById("pimageFile").value = "";
 }
 
+function createProductCard(p){
+
+    return `
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
+
+    <div class="card product-card h-100 shadow-sm"
+         onclick="viewProduct(${p.pid})">
+
+        <img
+            src="${p.imageUrl || 'https://picsum.photos/400'}"
+            class="product-image"
+            alt="${p.name}">
+
+        <div class="card-body">
+
+            <h4 class="text-center">${p.name}</h4>
+
+            <hr>
+
+            <p><strong>ID:</strong> ${p.pid}</p>
+
+            <p><strong>Brand:</strong> ${p.brand}</p>
+
+            <p><strong>Category:</strong> ${p.catagory}</p>
+
+            <p>
+                <strong>Price:</strong>
+                <span class="text-success fw-bold">
+                    ₹ ${Number(p.price).toLocaleString("en-IN")}
+                </span>
+            </p>
+
+            <p>
+
+    <strong>Description:</strong>
+
+    <span class="description">
+
+        ${p.description}
+
+    </span>
+
+</p>
+
+            ${
+                getUserRole() === "ADMIN"
+                ?
+                `
+                <div class="action-buttons">
+
+                <button
+    class="btn btn-warning"
+    onclick="event.stopPropagation();editProduct(${p.pid})">
+
+    <i class="bi bi-pencil-square"></i>
+    Edit
+
+</button>
+
+                  <button
+    class="btn btn-danger"
+    onclick="event.stopPropagation();deleteProduct(${p.pid})">
+
+    <i class="bi bi-trash"></i>
+    Delete
+
+</button>
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    </div>
+
+</div>
+`;
+
+}
+
 window.onload = function() {
 
     console.log(
@@ -712,3 +656,9 @@ window.onload = function() {
 
     loadProducts();
 };
+
+function viewProduct(id){
+
+    window.location.href =
+        "product-details.html?id=" + id;
+}
